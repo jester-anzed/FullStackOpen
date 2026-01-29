@@ -13,9 +13,6 @@ const StatisticLine = ({text, value}) => {
     </tr>
   )
 }
-  
-
-
 
 const Statistics = (props) => {
     const total = props.good + props.neutral + props.bad
@@ -45,9 +42,6 @@ const Statistics = (props) => {
 
 }
   
-
-
-
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
@@ -68,12 +62,11 @@ const App = () => {
     setBad(bad + 1)
   }
 
-
-
   return (
     <>
 
       <Display header="Give Feedback" />
+
       <table>
         <tbody>
           <tr>
@@ -83,7 +76,9 @@ const App = () => {
           </tr>
         </tbody>
       </table>
+
       <Display header="Statistics" />
+
       <table>
         <tbody>
             <Statistics good={good} neutral={neutral} bad={bad} />
@@ -91,13 +86,9 @@ const App = () => {
       </table>
 
     </>
-  
     
-  
-    
-
-
     )
+
   }
 
 export default App
