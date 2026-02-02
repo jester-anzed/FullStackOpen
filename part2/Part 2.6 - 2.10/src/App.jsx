@@ -1,6 +1,17 @@
 import { useState } from 'react'
 
-const Phone = ({phone}) => <div>{phone}</div>
+
+
+const Persons = ({data, filter}) => {
+  const showPeople = data.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
+
+  return (
+    showPeople.map(person => <div key={person.id}>{person.name} {person.number}</div>)
+  )
+}
+
+const Filter =  ({person, filter}) => <div>Filter: <input value={person} onChange={filter} /></div>
+
 
 
 const App = () => {
@@ -16,57 +27,25 @@ const App = () => {
   const [filterName, setFilterName] = useState('')
 
 
-  const handleNameChange = (event) => {
-    setNewName(event.target.value)
-  }
 
-  const handleNumChange = (event) => {
-    setNewNum(event.target.value)
-
-  }
-
-  const showPeople = persons.filter(person => person.name.toLowerCase().includes(filterName.toLowerCase()))
- 
-
-  const Filter = (event) => {
-    event.preventDefault()
+  const handleFilter = (event) => {
+    console.log(event.target.value)
     setFilterName(event.target.value)
-  }
-
-
-  const addName = (event) => { 
-    event.preventDefault() 
-
-    if (persons.find(person => person.name === newName)) {
-      return alert(`${newName} is already added to phonebook`)
-    }
-    else {
-
-        const nameObject = {
-          name: newName,
-          number: newNum,
-          id: String(persons.length + 1)
-        }
-        setPersons(persons.concat(nameObject))
-        setNewName("")
-        setNewNum("")
-    }
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <form>
-        <div>filter shown with <input value={filterName} onChange={Filter} /></div>
-      </form>
-      <h2>Add A New</h2>
-      <form onSubmit={addName} >
-        <div> name: <input value={newName} onChange={handleNameChange} /> </div>
-        <div> number: <input value={newNum} onChange={handleNumChange}/></div>
-        <div> <button type="submit">add</button> </div>
-      </form>
-      <h2>Numbers</h2>
-        <Phone phone={showPeople.map(person => <div key={person.id}>{person.name} {person.number}</div>)} />
+
+      <Filter person={filterName} filter={handleFilter} />
+      <div>Debug: {filterName}</div>
+
+      <h3>Add a new</h3>
+
+
+      <h3>Numbers</h3>
+      <Persons data={persons} filter={filterName}/>  
+
     </div>
   )
 }
