@@ -11,14 +11,7 @@ const App = () => {
   const [filterName, setFilterName] = useState('')
 
 
-  const handleNameChange = (event) => {
-    setNewName(event.target.value)
-  }
-
-  const handleNumChange = (event) => {
-    setNewNum(event.target.value)
-
-  }
+  
 
   const showPeople = persons.filter(person => person.name.toLowerCase().includes(filterName.toLowerCase()))
  
