@@ -30,7 +30,6 @@ const Add = ({ persons,  setterPerson}) => {
 
   const submitForm = (event) => {
     event.preventDefault()
-    console.log("working")
 
     if (persons.find(person => person.name === newName)) {
       return alert(`${newName} is already added to phonebook`)
@@ -70,7 +69,6 @@ const App = () => {
   const [filterName, setFilterName] = useState('')
 
   const handleFilter = (event) => {
-    console.log(event.target.value)
     setFilterName(event.target.value)
 
   }
@@ -80,13 +78,13 @@ const App = () => {
       <h2>Phonebook</h2>
 
       <Filter person={filterName} filter={handleFilter} />
-      <div>Debug: {filterName}</div>
 
       <h3>Add a new</h3>
+
       <Add persons={persons} setterPerson={setPersons} />
 
-
       <h3>Numbers</h3>
+      
       <Persons data={persons} filter={filterName}/>  
 
     </div>
