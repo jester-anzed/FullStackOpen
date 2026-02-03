@@ -2,13 +2,18 @@ import { useState } from 'react'
 
 
 
+const Person = ({person}) => <div>{person.name} {person.number}</div>
+
+
+
 const Persons = ({data, filter}) => {
   const showPeople = data.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
-
+  
   return (
-    showPeople.map(person => <div key={person.id}>{person.name} {person.number}</div>)
+    showPeople.map(person => <Person key={person.id} person={person} />)
   )
 }
+
 
 const Filter =  ({person, filter}) => <div>Filter: <input value={person} onChange={filter} /></div>
 
