@@ -23,7 +23,7 @@ const Add = ({ persons,  setterPerson}) => {
     setNewName(event.target.value)
   }
 
-  const handleNumChange = (event) => {
+  const handleNumChange = (event) => {54
     setNewNum(event.target.value)
 
   }
