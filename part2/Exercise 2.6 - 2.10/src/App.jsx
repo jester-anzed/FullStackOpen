@@ -12,7 +12,7 @@ const Persons = ({data, filter}) => {
 const Filter =  ({person, filter}) => <div>Filter: <input value={person} onChange={filter} /></div>
 
 
-const Add = ({ persons,  setterPerson}) => {
+const Add = ({ people,  setterPerson}) => {
 
   const [newName, setNewName] = useState('')
   const [newNum, setNewNum] = useState('')
@@ -30,7 +30,7 @@ const Add = ({ persons,  setterPerson}) => {
   const submitForm = (event) => {
     event.preventDefault()
 
-    if (persons.find(person => person.name === newName)) {
+    if (people.find(person => person.name === newName)) {
       return alert(`${newName} is already added to phonebook`)
     }
 
@@ -39,9 +39,9 @@ const Add = ({ persons,  setterPerson}) => {
       const nameObject = {  
         name: newName,
         number: newNum,
-        id: String(persons.length + 1)
+        id: String(people.length + 1)
       }
-      setterPerson(persons.concat(nameObject))
+      setterPerson(people.concat(nameObject))
       setNewName("")
       setNewNum("")
     }
@@ -80,7 +80,7 @@ const App = () => {
 
       <h3>Add a new</h3>
 
-      <Add persons={persons} setterPerson={setPersons} />
+      <Add people={persons} setterPerson={setPersons} />
 
       <h3>Numbers</h3>
       
