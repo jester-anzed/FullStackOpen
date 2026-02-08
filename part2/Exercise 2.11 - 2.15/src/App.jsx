@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import person from './service/person'
+
 
 const Person = ({person}) => <div>{person.name} {person.number}</div>
 
@@ -41,9 +43,14 @@ const Add = ({ persons,  setterPerson}) => {
         number: newNum,
         id: String(persons.length + 1)
       }
-      setterPerson(persons.concat(nameObject))
-      setNewName("")
-      setNewNum("")
+
+      person.create(nameObject)
+      .then(newPerson => {
+        setterPerson(persons.concat(newPerson))
+        setNewName('')
+        setNewNum('')
+      })
+      
     }
   }
   return (

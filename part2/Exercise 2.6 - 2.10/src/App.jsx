@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
 
-
 const Person = ({person}) => <div>{person.name} {person.number}</div>
 
 const Persons = ({data, filter}) => {
