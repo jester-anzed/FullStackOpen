@@ -55,8 +55,8 @@ const Add = ({ persons,  setterPerson}) => {
   }
   return (
     <form onSubmit={submitForm}>
-      <div>name: <input value={newName} onChange={handleNameChange} /></div>
-      <div>number: <input value={newNum} onChange={handleNumChange} /></div>
+      <div>Name: <input value={newName} onChange={handleNameChange} /></div>
+      <div>Number: <input value={newNum} onChange={handleNumChange} /></div>
       <div> <button type="submit">Add</button> </div>
     </form>
     )
@@ -76,10 +76,8 @@ const App = () => {
 
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
-    .then(response => {
-      setPersons(response.data)
-    })
+    person.getAll()
+    .then(initialPerson => setPersons(initialPerson))
   }, [])
 
   return (
