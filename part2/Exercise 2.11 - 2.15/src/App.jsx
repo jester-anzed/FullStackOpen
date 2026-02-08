@@ -45,8 +45,8 @@ const Add = ({ persons,  setterPerson}) => {
       }
 
       person.create(nameObject)
-      .then(newPerson => {
-        setterPerson(persons.concat(newPerson))
+      .then(addPerson => {
+        setterPerson(persons.concat(addPerson))
         setNewName('')
         setNewNum('')
       })
