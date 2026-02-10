@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
-import person from './service/person'
+import people from './service/person'
 
 
-const Person = ({person}) => <div>{person.name} {person.number}</div>
+const Person = ({person, onDelete}) => <div>{person.name} {person.number} <button onClick={() => onDelete(person.id)}>Delete</button> </div>
 
-const Persons = ({data, filter}) => {
+const Persons = ({data, filter, onDelete}) => {
   const showPeople = data.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
   return (
-    showPeople.map(person => <Person key={person.id} person={person} />)
+    <>
+      {showPeople.map(person => <Person key={person.id} person={person} onDelete={onDelete}/>)}
+    </>
   )
 }
 const Filter =  ({person, filter}) => <div>Filter: <input value={person} onChange={filter} /></div>
@@ -24,7 +25,7 @@ const Add = ({ persons,  setterPerson}) => {
     setNewName(event.target.value)
   }
 
-  const handleNumChange = (event) => {54
+  const handleNumChange = (event) => {
     setNewNum(event.target.value)
 
   }
@@ -41,10 +42,9 @@ const Add = ({ persons,  setterPerson}) => {
       const nameObject = {  
         name: newName,
         number: newNum,
-        id: String(persons.length + 1)
       }
 
-      person.create(nameObject)
+      people.create(nameObject)
       .then(addPerson => {
         setterPerson(persons.concat(addPerson))
         setNewName('')
@@ -74,9 +74,18 @@ const App = () => {
     setFilterName(event.target.value)
   }
 
+  const deleteName = (id) => {
+    const name = persons.find(person => person.id === id)
+
+    if (window.confirm(`Delete ${name.name}? `)) {
+      people.deleteData(id)
+      .then(setPersons(persons.filter(person => person.id !== id)))
+    }
+
+  }
 
   useEffect(() => {
-    person.getAll()
+    people.getAll()
     .then(initialPerson => setPersons(initialPerson))
   }, [])
 
@@ -92,7 +101,7 @@ const App = () => {
 
       <h3>Numbers</h3>
       
-      <Persons data={persons} filter={filterName}/>  
+      <Persons data={persons} filter={filterName} onDelete={deleteName} />
 
     </div>
   )
