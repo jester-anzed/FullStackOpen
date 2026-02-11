@@ -1,19 +1,65 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
-import Note from './components/Note'
+import task from "./service/notes"
 
 
+const Duty = ({duty, onToggle}) => {
+  return (
+    <div key={duty.id}>
+      <div>Title: {duty.title}</div>
+      <div>Description: {duty.desription}</div>
+      <button onClick={() => onToggle=(duty.completed)}>Completed</button>
+    </div>
+  )
+}
 
-const addNote = event => {
-  event.preventDefault()
-  const noteObject = {
-    content: newNote,
-    important: Math.random() < 0.5,
+
+ const Test = ({duty}) => {
+  console.log(duty)
+ }
+
+const Filter = ({filter, setter}) => {
+  return (
+    <div>
+      <div>Filter: <input value={filter} onChange={setter}/></div>
+
+    </div>
+  )
+
+}
+
+
+const App = () => {
+  const [duty, setterDuty] = useState([])
+  const [filter, setterFilter] = useState("")
+
+ 
+
+  const filterChange = (event) => {
+    setterFilter(event.target.value)
   }
 
-  axios
-    .post('http://localhost:3001/notes', noteObject)
-    .then(response => {
-      console.log(response)
+
+  useEffect(() => {
+    task.getAll()
+    .then(allTask => {
+      setterDuty(allTask)
     })
+  }, [])
+
+
+  return (
+    
+
+
+    <div>
+    
+    <h2>All Duties!</h2>
+    <Filter filter={filter} setter={filterChange} />
+    <Test duty={duty} />
+    </div>
+  )
+
 }
+
+
+export default App
