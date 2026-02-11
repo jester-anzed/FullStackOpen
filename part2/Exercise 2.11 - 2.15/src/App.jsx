@@ -37,11 +37,21 @@ const Add = ({ persons,  setterPerson}) => {
       const person = persons.find(p => p.name === newName)
         if (window.confirm(`${newName} is already addewd to phonebook,
           replace the old number with a new one?`)) {
-            const test = persons.filter(person => person.name === newName)
-            const test1 = test.map(person => person.id)
-            console.log(test1)
-      
-          }
+            const nameObject = {
+              name: newName,
+              number: newNum,
+
+            }
+            people.update(person.id, nameObject)
+            .then(updatedPerson => {
+              setterPerson(persons.map(p => p.id === person.id ? updatedPerson : p))
+              setNewNum("")
+              setNewName("")
+            }) 
+        } else {
+          setNewNum("")
+          setNewName("")
+        }
 
     }
 
@@ -86,6 +96,7 @@ const App = () => {
     const name = persons.find(person => person.id === id)
 
     if (window.confirm(`Delete ${name.name}? `)) {
+      console.log(typeof id)
       people.deleteData(id)
       .then(setPersons(persons.filter(person => person.id !== id)))
     }
