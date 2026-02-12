@@ -36,22 +36,24 @@ const Add = ({ persons,  setterPerson, setFiller}) => {
 
     if (persons.find(person => person.name === newName)) {
       const person = persons.find(p => p.name === newName)
-        if (window.confirm(`${newName} is already addewd to phonebook,
-          replace the old number with a new one?`)) {
+        if (window.confirm(`${newName} is already addewd to phonebook, replace the old number with a new one?`)) {
             const nameObject = {
               name: newName,
               number: newNum,
-
             }
             people.update(person.id, nameObject)
             .then(updatedPerson => {
+              setFiller({message: `${updatedPerson.name} updated!`, type: "success"})
               setterPerson(persons.map(p => p.id === person.id ? updatedPerson : p))
               setNewNum("")
               setNewName("")
-            }) 
+            })
+            .catch(error => {
+                setFiller({message: `${newName} already removed!`, type: "error"})
+            })
         } else {
-          setNewNum("")
-          setNewName("")
+          setNewNum('')
+          setNewName('')
         }
 
     }
@@ -65,8 +67,8 @@ const Add = ({ persons,  setterPerson, setFiller}) => {
 
       people.create(nameObject)
       .then(addPerson => {
+        setFiller({message: `${addPerson.name} Added!`, type: "success"})
         setterPerson(persons.concat(addPerson))
-        setFiller(newName)
         setNewName('')
         setNewNum('')
       })
@@ -89,8 +91,9 @@ const App = () => {
   ])
 
   const [filterName, setFilterName] = useState('')
-  const [fillerName, setFiller] = useState('')
+  const [fillerName, setFiller] = useState(null)
 
+  console.log(fillerName)
 
   const handleFilter = (event) => {
     setFilterName(event.target.value)
@@ -116,7 +119,6 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       
-
       <Notif message={fillerName} />
 
       <Filter person={filterName} filter={handleFilter} />
