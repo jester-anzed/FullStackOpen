@@ -83,11 +83,16 @@ const Add = ({duty, setter}) => {
     }
 
 
-
   return ( 
     <form onSubmit={submitAdd}>
       <div>Title: <input value={dutyTitle} onChange={handleTitle} /> </div>
       <div>Description: <input value={dutyDes} onChange={handleDes} /> </div>
+      <select>
+        <option>High</option>
+        <option>Medium</option>
+        <option>Low</option>
+      </select>
+      
       <button type="submit">Save</button>
     </form>
   )
