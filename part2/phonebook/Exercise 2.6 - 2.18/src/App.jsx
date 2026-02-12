@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import people from './service/person'
+import Notif from './service/Notification'
+import './index.css'
 
 
 const Person = ({person, onDelete}) => <div>{person.name} {person.number} <button onClick={() => onDelete(person.id)}>Delete</button> </div>
@@ -15,11 +17,10 @@ const Persons = ({data, filter, onDelete}) => {
 const Filter =  ({person, filter}) => <div>Filter: <input value={person} onChange={filter} /></div>
 
 
-const Add = ({ persons,  setterPerson}) => {
+const Add = ({ persons,  setterPerson, setFiller}) => {
 
   const [newName, setNewName] = useState('')
   const [newNum, setNewNum] = useState('')
-
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -65,6 +66,7 @@ const Add = ({ persons,  setterPerson}) => {
       people.create(nameObject)
       .then(addPerson => {
         setterPerson(persons.concat(addPerson))
+        setFiller(newName)
         setNewName('')
         setNewNum('')
       })
@@ -87,6 +89,8 @@ const App = () => {
   ])
 
   const [filterName, setFilterName] = useState('')
+  const [fillerName, setFiller] = useState('')
+
 
   const handleFilter = (event) => {
     setFilterName(event.target.value)
@@ -111,12 +115,15 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      
+
+      <Notif message={fillerName} />
 
       <Filter person={filterName} filter={handleFilter} />
 
       <h3>Add a new</h3>
 
-      <Add persons={persons} setterPerson={setPersons} />
+      <Add persons={persons} setterPerson={setPersons} setFiller={setFiller} />
 
       <h3>Numbers</h3>
       
