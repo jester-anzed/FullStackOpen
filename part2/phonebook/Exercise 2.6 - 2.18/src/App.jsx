@@ -93,7 +93,7 @@ const App = () => {
   const [filterName, setFilterName] = useState('')
   const [fillerName, setFiller] = useState(null)
 
-  console.log(fillerName)
+  
 
   const handleFilter = (event) => {
     setFilterName(event.target.value)
@@ -103,7 +103,6 @@ const App = () => {
     const name = persons.find(person => person.id === id)
 
     if (window.confirm(`Delete ${name.name}? `)) {
-      console.log(typeof id)
       people.deleteData(id)
       .then(setPersons(persons.filter(person => person.id !== id)))
     }
