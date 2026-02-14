@@ -25,15 +25,30 @@ const App = () => {
               setValue(response.data)
             }
           })
-        } else if (value !== null) {
+        } else if (value && !filter.includes(value.name.common)) {
             setValue(null)
         }
       }, [userInput])
     
 
+      if (value) {
+        return ( 
+          <div key={value.name.common}>
+
+            <h1>{value.name.common}</h1>
+            <div>Capital: {value.capital}</div>
+            <div>Area: {value.area}</div>
+
+            <h1>Languages</h1>
+            <ul>{Object.values(value.languages).map(d => <li key={d}>{d}</li>)}</ul>
+            
+            <img src={value.flags.png} alt={value.flags.alt}/>
+          </div>
+        )
+      } 
+
       if (filter.length > 10 ) return "Too many to specify" 
 
-      
       if (filter.length < 10 && filter.length > 1) {
 
         const showHandle = (name) => {
@@ -47,34 +62,10 @@ const App = () => {
           </>
         )
       }
-
-
     
-      if (filter.length === 1 && value) {
-        return ( 
-          <div key={value.name.common}>
-
-            <h1>{value.name.common}</h1>
-            <div>Capital: {value.capital}</div>
-            <div>Area: {value.area}</div>
-
-            <h1>Languages</h1>
-            <ul>{Object.values(value.languages).map(d => <li key={d}>{d}</li>)}</ul>
-            
-            <img src={value.flags.png} alt={value.flags.alt}/>
-
-
-          </div>
-
-        )
-
-      }
-    
+     
   }
-
-  console.log(value)
   
-
   useEffect(() => {
     axios.get('https://studies.cs.helsinki.fi/restcountries/api/all')
     .then(response => {
