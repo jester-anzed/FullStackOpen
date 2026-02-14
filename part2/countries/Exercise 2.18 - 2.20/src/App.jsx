@@ -7,7 +7,6 @@ const App = () => {
   const [countries, setCountry] = useState([])
   const [userInput, setInput] = useState("")
   const [value, setValue] = useState(null)
- 
 
   const handleChange = (event) => setInput(event.target.value)
 
@@ -33,8 +32,24 @@ const App = () => {
     
 
       if (filter.length > 10 ) return "Too many to specify" 
-      if (filter.length < 10 && filter.length > 1) return <div>{filter.map(d => <div key={d}>{d}</div>)}</div>
 
+      
+      if (filter.length < 10 && filter.length > 1) {
+
+        const showHandle = (name) => {
+          axios.get(`https://studies.cs.helsinki.fi/restcountries/api/name/${name.toLowerCase()}`)
+          .then(response => setValue(response.data))
+        }
+
+        return (
+          <>
+            <div>{filter.map(d => <div key={d}>{d} <button onClick={() => showHandle(d)}>Show</button> </div>)}</div>
+          </>
+        )
+      }
+
+
+    
       if (filter.length === 1 && value) {
         return ( 
           <div key={value.name.common}>
@@ -56,8 +71,9 @@ const App = () => {
       }
     
   }
+
+  console.log(value)
   
-     
 
   useEffect(() => {
     axios.get('https://studies.cs.helsinki.fi/restcountries/api/all')
@@ -70,7 +86,7 @@ const App = () => {
     <>
       <form onSubmit={searchCountry}>
           Find Country: <input value={userInput} onChange={handleChange}/>
-          <button type="submit">Submit</button>
+          <button className="search" type="submit">Submit</button>
       </form>
       <Filter />
     </>
