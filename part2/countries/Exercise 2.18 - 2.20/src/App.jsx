@@ -24,7 +24,9 @@ const App = () => {
         if (filter.length === 1) {
           axios.get(`https://studies.cs.helsinki.fi/restcountries/api/name/${filter[0].toLowerCase()}`)
           .then(response => {
-            console.log(response.data.name)
+            console.log(response.data.name
+              
+            )
         })
        }
       }, [filter] )
