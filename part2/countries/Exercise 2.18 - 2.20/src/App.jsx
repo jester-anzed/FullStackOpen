@@ -2,11 +2,18 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './index.css'
 
+
+const api_key = import.meta.env.VITE_WEATHER_KEY
+
+
+
+
 const App = () => {
 
   const [countries, setCountry] = useState([])
   const [userInput, setInput] = useState("")
   const [value, setValue] = useState(null)
+  const [weather, setWeather] =useState(null)
 
   const handleChange = (event) => setInput(event.target.value)
 
@@ -23,16 +30,23 @@ const App = () => {
           .then(response => {
             if (!value || value.name.common !== response.data.name.common) {
               setValue(response.data)
+              return axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${response.data.name.common}&appid=${api_key}&units=metric`)
+            }
+          })
+          .then(weather => {
+            if (weather) {
+              setWeather(weather.data)
+
             }
           })
         } else if (value && !filter.includes(value.name.common)) {
             setValue(null)
         }
       }, [userInput])
-    
 
       if (value) {
         return ( 
+  
           <div key={value.name.common}>
 
             <h1>{value.name.common}</h1>
@@ -43,6 +57,16 @@ const App = () => {
             <ul>{Object.values(value.languages).map(d => <li key={d}>{d}</li>)}</ul>
             
             <img src={value.flags.png} alt={value.flags.alt}/>
+
+            <h1>Temperature in {value.name.common}</h1>
+            {weather && (
+            <div>
+              <div>Temperature: {weather.main.temp} Celsius</div>
+              <img src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} />
+              <div>Wind {weather.wind.speed} m/s</div>
+            </div>
+            )}
+            
           </div>
         )
       } 
