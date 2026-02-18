@@ -12,8 +12,16 @@ const requestMorgan = (tokens, request, response ) => {
   tokens.status(request, response),
   tokens.res(request, response, 'content-length'), '-',
   tokens['response-time'](request, response), 'ms',
+  tokens.new(request, response)
   ].join(' ')
 }
+
+
+morgan.token('new', (request, response) => {
+  const body = request.body
+  return JSON.stringify(body)
+})
+
 
 app.use(morgan(requestMorgan))
 
