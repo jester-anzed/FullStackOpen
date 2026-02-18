@@ -1,8 +1,4 @@
-GET  http://localhost:3001/info
-Content-Type: application/json
+DELETE   http://localhost:3001/api/persons/2
+Content-Type: text/html
 
-{
-    "content": "Vscode Test",
-    "important": true
 
-}
