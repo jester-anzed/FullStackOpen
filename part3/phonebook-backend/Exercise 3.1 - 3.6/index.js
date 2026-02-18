@@ -43,6 +43,8 @@ app.get('/info', (request, response) => {
 
 })
 
+app.get('/api/person/{
+
 
 const PORT = 3001
 app.listen(PORT, () => {
