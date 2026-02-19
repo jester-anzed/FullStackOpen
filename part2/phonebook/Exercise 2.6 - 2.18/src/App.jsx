@@ -104,7 +104,7 @@ const App = () => {
 
     if (window.confirm(`Delete ${name.name}? `)) {
       people.deleteData(id)
-      .then(setPersons(persons.filter(person => person.id !== id)))
+        .then(() => setPersons(persons.filter(person => person.id !== id)))
     }
 
   }
