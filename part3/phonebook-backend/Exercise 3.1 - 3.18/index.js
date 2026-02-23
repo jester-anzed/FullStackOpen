@@ -56,7 +56,7 @@ app.post('/api/persons/', (request, response) => {
 
 })
 
-//Info Request
+//Info Request  
 app.get('/info', async (request, response) => {
   const now = new Date();
   const total = await Phone.countDocuments()
