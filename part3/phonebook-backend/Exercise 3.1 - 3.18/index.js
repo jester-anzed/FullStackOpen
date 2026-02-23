@@ -69,7 +69,7 @@ app.get('/info', async (request, response) => {
 
 
 //Request using ID
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   const id = request.params.id 
 
  Phone.findById(id).then(person => { 
@@ -79,14 +79,12 @@ app.get('/api/persons/:id', (request, response) => {
     } else {
       response.status(404).json({ error: "Incorrect Id" })
     }
-  }).catch(error => {
-    response.status(400).json({ error: "Malformatted ID" })
-  })
+  }).catch(error => next(error))
 
 })
 
 //Delete Request
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
   
    Phone.findByIdAndDelete(id).then(result => {
@@ -98,13 +96,11 @@ app.delete('/api/persons/:id', (request, response) => {
       response.status(404).json({ error: "Invalid Id" })
     }
     })
-    .catch(error => {
-      response.status(400).json({ error: "Malformatted ID" })
-    })
+    .catch(error => next(error))
 })
 
 //Update request
-app.put('/api/persons/:id', (request, response) => {
+app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
 
   Phone.findById(request.params.id).then(person => {
@@ -117,12 +113,21 @@ app.put('/api/persons/:id', (request, response) => {
 
     return person.save().then(data => response.json(data))
   })
-  .catch(error => {
-      response.status(400).json({ error: "Malformatted ID" })
-  })
+  .catch(error => next(error))
 
 })
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'Malformatted id' })
+  } 
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 
 
