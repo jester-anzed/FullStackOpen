@@ -7,7 +7,12 @@ import './index.css'
 const Person = ({person, onDelete}) => <div>{person.name} {person.number} <button onClick={() => onDelete(person.id)}>Delete</button> </div>
 
 const Persons = ({data, filter, onDelete}) => {
-  const showPeople = data.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
+  console.log(data)
+  if (!data) return null
+
+    const showPeople = data.filter(person => 
+      person.name && person.name.toLowerCase().includes(filter.toLowerCase())
+    )
   return (
     <>
       {showPeople.map(person => <Person key={person.id} person={person} onDelete={onDelete}/>)}
@@ -83,8 +88,6 @@ const Add = ({ persons,  setterPerson, setFiller}) => {
     </form>
     )
 }
-
-
 
 const App = () => {
   const [persons, setPersons] = useState([
