@@ -74,7 +74,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 
  Phone.findById(id).then(person => { 
     if (person) {
-      console.log("Found")
+      console.log("Found Person")
       response.json(person)
     } else {
       response.status(404).json({ error: "Incorrect Id" })
