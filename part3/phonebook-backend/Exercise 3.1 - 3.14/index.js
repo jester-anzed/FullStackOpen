@@ -14,7 +14,6 @@ const morgan = require('morgan')
 const Phone = require('./models/phonebook')
 
 
-
 const requestMorgan = (tokens, request, response ) => {
   return [
   tokens.method(request, response),
@@ -33,14 +32,6 @@ morgan.token('new', (request, response) => {
 
 app.use(morgan(requestMorgan))
 
-// ID Generator
-const generateId = () => {
-  const id = Math.floor(Math.random() * 10000000)
-
-  return String(persons.length + id)
-
-}
-
 //GET Request
 app.get('/api/persons', (request, response) => {
   Phone.find({}).then(person => response.json(person))
@@ -48,62 +39,94 @@ app.get('/api/persons', (request, response) => {
 
 
 //POST Request
-
 app.post('/api/persons/', (request, response) => {
    const body = request.body
 
-   Phone.findOne({ name: request.body.name }).then(person => {
-      const exists = person !== null
-
-    if (exists) {
-      return response.status(400).json({ error: 'name already exists' })
-    }
-
-  })
-
-   if (!body.name || !body.number) {
+  if (!body.name || !body.number) {
       return response.status(404).json({ error: "missing content" })
    }
 
-   
+  const newContact = new Phone({
+    name: body.name,
+    number: body.number,
+   })
+
+  Phone.findOne({ name: body.name }).then(person => {
+    if (person !== null) {
+      return response.status(400).json({ error: 'name already exists' })
+    } else {
+      return newContact.save().then(data => response.json(data))
+    }
+  })
 
 })
 
-
-
-
-
-
-app.get('/info', (request, response) => {
+//Info Request
+app.get('/info', async (request, response) => {
   const now = new Date();
+  const total = await Phone.countDocuments()
+
   response.setHeader('Content-Type', 'text/html')
-  response.write(`<p>Phonebook has info for ${persons.length} people</p>`)
+  response.write(`<p>Phonebook has info for ${total} people</p>`)
   response.write(`<p>${now}</p>`)
   response.end()
 })
 
 
+//Request using ID
 app.get('/api/persons/:id', (request, response) => {
-  
   const id = request.params.id 
-  const person = persons.find(person => person.id === id)
-  
+
+ Phone.findById(id).then(person => { 
     if (person) {
+      console.log("Found")
       response.json(person)
     } else {
-      response.status(404).end()
+      response.status(404).json({ error: "Incorrect Id" })
     }
+  }).catch(error => {
+    response.status(400).json({ error: "Malformatted ID" })
+  })
+
 })
 
+//Delete Request
 app.delete('/api/persons/:id', (request, response) => {
-  console.log('working')
   const id = request.params.id
-  persons = persons.filter(person => person.id !==id)
-
-  response.status(204).end()
-
+  
+   Phone.findByIdAndDelete(id).then(result => {
+    if (result) {
+      console.log("Deleted")
+      response.status(204).end()
+    } else {
+      console.log("Incorrect ID")
+      response.status(404).json({ error: "Invalid Id" })
+    }
+    })
+    .catch(error => {
+      response.status(400).json({ error: "Malformatted ID" })
+    })
 })
 
+//Update request
+app.put('/api/persons/:id', (request, response) => {
+  const { name, number } = request.body
+
+  Phone.findById(request.params.id).then(person => {
+    if (!person) {
+      return response.status(404).json({ error: "Invalid Id" })
+    }
+
+    person.name = name
+    person.number = number
+
+    return person.save().then(data => response.json(data))
+  })
+  .catch(error => {
+      response.status(400).json({ error: "Malformatted ID" })
+  })
+
+})
 
 
 

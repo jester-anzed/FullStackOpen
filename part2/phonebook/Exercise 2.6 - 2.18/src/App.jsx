@@ -9,7 +9,6 @@ const Person = ({person, onDelete}) => <div>{person.name} {person.number} <butto
 const Persons = ({data, filter, onDelete}) => {
   console.log(data)
   if (!data) return null
-
     const showPeople = data.filter(person => 
       person.name && person.name.toLowerCase().includes(filter.toLowerCase())
     )
