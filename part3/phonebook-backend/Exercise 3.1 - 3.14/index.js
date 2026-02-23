@@ -51,13 +51,8 @@ app.post('/api/persons/', (request, response) => {
     number: body.number,
    })
 
-  Phone.findOne({ name: body.name }).then(person => {
-    if (person !== null) {
-      return response.status(400).json({ error: 'name already exists' })
-    } else {
-      return newContact.save().then(data => response.json(data))
-    }
-  })
+  return newContact.save().then(data => response.json(data))
+
 
 })
 
