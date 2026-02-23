@@ -108,6 +108,7 @@ app.put('/api/persons/:id', (request, response, next) => {
       return response.status(404).json({ error: "Invalid Id" })
     }
 
+    console.log("Updated")
     person.name = name
     person.number = number
 
