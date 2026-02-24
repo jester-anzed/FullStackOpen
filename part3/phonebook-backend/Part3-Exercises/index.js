@@ -118,6 +118,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 })
 
+//Error Handler
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
@@ -133,7 +134,7 @@ const errorHandler = (error, request, response, next) => {
 app.use(errorHandler)
 
 
-
+//App Listen at the end
 const PORT = 3001
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
