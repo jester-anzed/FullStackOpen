@@ -7,7 +7,6 @@ import './index.css'
 const Person = ({person, onDelete}) => <div>{person.name} {person.number} <button onClick={() => onDelete(person.id)}>Delete</button> </div>
 
 const Persons = ({data, filter, onDelete}) => {
-  console.log(data)
   if (!data) return null
     const showPeople = data.filter(person => 
       person.name && person.name.toLowerCase().includes(filter.toLowerCase())
@@ -60,24 +59,25 @@ const Add = ({ persons,  setterPerson, setFiller}) => {
           setNewName('')
         }
 
-    }
-
-    else {
-
-      const nameObject = {  
+    } else {
+      const addPerson = { 
         name: newName,
-        number: newNum,
+        number: newNum
       }
 
-      people.create(nameObject)
-      .then(addPerson => {
-        setFiller({message: `${addPerson.name} Added!`, type: "success"})
-        setterPerson(persons.concat(addPerson))
-        setNewName('')
-        setNewNum('')
+      people.create(addPerson)
+      .then(person => {
+        setFiller({message: `${person.name} Added!`, type: "success"})
+        setterPerson(persons.concat(person))
+        setNewNum("")
+        setNewName("")
       })
-      
+      .catch(error => {
+        setFiller({message: `${error.response.data.error}`, type: "error"}) 
+      })
+
     }
+
   }
   return (
     <form onSubmit={submitForm}>
