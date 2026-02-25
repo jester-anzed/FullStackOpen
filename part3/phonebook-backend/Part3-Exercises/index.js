@@ -1,30 +1,22 @@
 require('dotenv').config()
-
+const express = require('express')
 const app = express()
 app.use(express.json())
-
-
 app.use(express.static('dist'))
-
-
 const morgan = require('morgan')
-
-
 const Phone = require('./models/phonebook')
-
-
 const requestMorgan = (tokens, request, response ) => {
   return [
-  tokens.method(request, response),
-  tokens.url(request, response),
-  tokens.status(request, response),
-  tokens.res(request, response, 'content-length'), '-',
-  tokens['response-time'](request, response), 'ms',
-  tokens.new(request, response)
+    tokens.method(request, response),
+    tokens.url(request, response),
+    tokens.status(request, response),
+    tokens.res(request, response, 'content-length'), '-',
+    tokens['response-time'](request, response), 'ms',
+    tokens.new(request, response)
   ].join(' ')
 }
 
-morgan.token('new', (request, response) => {
+morgan.token('new', (request) => {
   const body = request.body
   return JSON.stringify(body)
 })
@@ -39,25 +31,25 @@ app.get('/api/persons', (request, response) => {
 
 //POST Request
 app.post('/api/persons/', (request, response) => {
-   const body = request.body
+  const body = request.body
 
   if (!body.name || !body.number) {
-      return response.status(404).json({ error: "missing content" })
-   }
+    return response.status(404).json({ error: 'missing content' })
+  }
 
   const newContact = new Phone({
     name: body.name,
     number: body.number,
-   })
+  })
 
   return newContact.save().then(data => response.json(data))
 
 
 })
 
-//Info Request  
+//Info Request
 app.get('/info', async (request, response) => {
-  const now = new Date();
+  const now = new Date()
   const total = await Phone.countDocuments()
 
   response.setHeader('Content-Type', 'text/html')
@@ -69,14 +61,14 @@ app.get('/info', async (request, response) => {
 
 //Request using ID
 app.get('/api/persons/:id', (request, response, next) => {
-  const id = request.params.id 
+  const id = request.params.id
 
- Phone.findById(id).then(person => { 
+  Phone.findById(id).then(person => {
     if (person) {
-      console.log("Found Person")
+      console.log('Found Person')
       response.json(person)
     } else {
-      response.status(404).json({ error: "Incorrect Id" })
+      response.status(404).json({ error: 'Incorrect Id' })
     }
   }).catch(error => next(error))
 
@@ -85,16 +77,16 @@ app.get('/api/persons/:id', (request, response, next) => {
 //Delete Request
 app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
-  
-   Phone.findByIdAndDelete(id).then(result => {
+
+  Phone.findByIdAndDelete(id).then(result => {
     if (result) {
-      console.log("Deleted")
+      console.log('Deleted')
       response.status(204).end()
     } else {
-      console.log("Incorrect ID")
-      response.status(404).json({ error: "Invalid Id" })
+      console.log('Incorrect ID')
+      response.status(404).json({ error: 'Invalid Id' })
     }
-    })
+  })
     .catch(error => next(error))
 })
 
@@ -104,16 +96,16 @@ app.put('/api/persons/:id', (request, response, next) => {
 
   Phone.findById(request.params.id).then(person => {
     if (!person) {
-      return response.status(404).json({ error: "Invalid Id" })
+      return response.status(404).json({ error: 'Invalid Id' })
     }
 
-    console.log("Updated")
+    console.log('Updated')
     person.name = name
     person.number = number
 
     return person.save().then(data => response.json(data))
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 
 })
 

@@ -23,23 +23,24 @@ const phoneSchema = new mongoose.Schema({
 const Phone = mongoose.model('Phone', phoneSchema)
 
 const phone = new Phone({
-    name: process.argv[3],
-    number: process.argv[4],
+  name: process.argv[3],
+  number: process.argv[4],
 })
 
 if (process.argv.length === 5) {
-    phone.save().then(result => {
-        console.log(`Added ${process.argv[3]} number ${process.argv[4]} to phonebook`)
-        console.log(mongoose.connection.close())
-    })
+  phone.save().then(result => {
+    console.log(result)
+    console.log(`Added ${process.argv[3]} number ${process.argv[4]} to phonebook`)
+    console.log(mongoose.connection.close())
+  })
 }
 
 if (process.argv.length === 3) {
-    Phone.find().then(result => {
-        console.log("phonebook: ")
-        result.forEach(phone => {
-            console.log(`${phone.name} ${phone.number}`)
-        })
-        mongoose.connection.close()
+  Phone.find().then(result => {
+    console.log('phonebook: ')
+    result.forEach(phone => {
+      console.log(`${phone.name} ${phone.number}`)
     })
+    mongoose.connection.close()
+  })
 }
