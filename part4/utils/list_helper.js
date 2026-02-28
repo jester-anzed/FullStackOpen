@@ -1,9 +1,8 @@
+const _ = require('lodash');
+
 const dummy = (blogs) => {
   return 1
 }
-
-
-
 
 const totalLikes = (likes) => {
 
@@ -23,6 +22,15 @@ const totalLikes = (likes) => {
         return blog.reduce((sum, item) => sum + item, 0)
     }
 }
+
+const favoriteBlog = (blogs) => {
+    const array = blogs.map(blog => blog.likes)
+    const max = Math.max(...array)
+    
+    return max
+}
+
+
 
 
 const blogs = [
@@ -65,30 +73,28 @@ const blogs = [
     url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
     likes: 0,
     __v: 0
-  },
-  {
-    _id: "5a422bc61b54a676234d17fc",
-    title: "Type wars",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-    likes: 2,
-    __v: 0
-  }  
+  }
+ 
 ]
 
+const mostBlogs = (blogs) => {
+    let name = blogs.map(blog => blog.author)
 
-const favoriteBlog = (blogs) => {
-    const array = blogs.map(blog => blog.likes)
-    const max = Math.max(...array)
-    
-    return max
+    const counts = _.countBy(name);
+
+    const most = _.maxBy(Object.values(counts))
+    const mostFrequent = _.maxBy(Object.keys(counts), (o) => counts[o]);
+
+    return `author: '${mostFrequent}', blogs: ${most}`
+
 }
 
-
+console.log(mostBlogs(blogs))
 
 
 module.exports = {
     dummy,
     totalLikes,
-    favoriteBlog
+    favoriteBlog,
+    mostBlogs
 }
