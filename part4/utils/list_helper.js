@@ -73,28 +73,46 @@ const blogs = [
     url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
     likes: 0,
     __v: 0
-  }
- 
+  },
+  {
+    _id: "5a422bc61b54a676234d17fc",
+    title: "Type wars",
+    author: "Robert C. Martin",
+    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+    likes: 2,
+    __v: 0
+  }  
 ]
 
+
 const mostBlogs = (blogs) => {
-    let name = blogs.map(blog => blog.author)
 
-    const counts = _.countBy(name);
-
-    const most = _.maxBy(Object.values(counts))
+    const counts = _.countBy(blogs, "author");
     const mostFrequent = _.maxBy(Object.keys(counts), (o) => counts[o]);
 
-    return `author: '${mostFrequent}', blogs: ${most}`
+    return {
+      author: mostFrequent,
+      blogs: counts[mostFrequent]
+    }
 
 }
 
 console.log(mostBlogs(blogs))
+
+const mostLikes = (blogs) => {
+  const topBlog = _.maxBy(blogs, 'likes')
+  
+  return {
+    author: topBlog.author,
+    likes: topBlog.likes
+  }
+}
 
 
 module.exports = {
     dummy,
     totalLikes,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
 }
