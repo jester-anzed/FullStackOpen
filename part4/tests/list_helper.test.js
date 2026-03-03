@@ -14,12 +14,26 @@ beforeEach(async () => {
   await Blogs.insertMany(blogs)
 })
 
-test.only('returns the correct amount of blogs', async () => {
+test('returns the correct amount of blogs', async () => {
   const response = await api.get('/api/blogs')
 
   assert.equal(response.body.length, 6)
+})
+
+
+test.only('verify unique identifier property', async () => {
+
+  const response = await api.get('/api/blogs')
+
+  const firstBlog = response.body[0]
+  
+  assert.ok(firstBlog.id)
+  assert.strictEqual(firstBlog._id, undefined)
+
 
 })
+
+
 
 
 test('dummy returns one', () => {
