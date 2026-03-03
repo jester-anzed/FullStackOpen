@@ -32,7 +32,7 @@ test('verify unique identifier property', async () => {
 
 })
 
-test.only('verify post request', async () => {
+test('verify post request', async () => {
 
   const newBlog = {
     title: "PoE",
@@ -56,6 +56,26 @@ test.only('verify post request', async () => {
   assert(contents.includes("PoE"))
 
 })
+
+test.only('verify likes', async () => {
+  const newBlog = {
+    title: "Workout",
+    author: "Marc",
+    url: "www.marc.com",
+  }
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  
+  assert.strictEqual(response.body.likes, 0)
+
+})
+
+
 
 test('dummy returns one', () => {
   const blogs = []
