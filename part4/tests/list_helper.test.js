@@ -57,7 +57,7 @@ test('verify post request', async () => {
 
 })
 
-test.only('verify likes', async () => {
+test('verify likes', async () => {
   const newBlog = {
     title: "Workout",
     author: "Marc",
@@ -69,10 +69,28 @@ test.only('verify likes', async () => {
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
-
   
   assert.strictEqual(response.body.likes, 0)
 
+})
+
+
+test('missing data', async () => {
+  const newBlog = {
+    author: "Mac",
+    likes: 10,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+  const response = await api.get('/api/blogs')
+
+  assert.strictEqual(response.body.length, blogs.length)
+
+  
 })
 
 
