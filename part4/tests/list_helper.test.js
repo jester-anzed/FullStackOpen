@@ -1,7 +1,26 @@
-const { test, describe } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const listHelper = require('../utils/list_helper')
+const supertest = require('supertest')
+const app = require('../app')
 const blogs = require('./blog_helper')
+const mongoose = require('mongoose')
+const Blogs = require('../models/blog')
+
+const api = supertest(app)
+
+beforeEach(async () => {
+  await Blogs.deleteMany({})
+  await Blogs.insertMany(blogs)
+})
+
+test.only('returns the correct amount of blogs', async () => {
+  const response = await api.get('/api/blogs')
+
+  assert.equal(response.body.length, 6)
+
+})
+
 
 test('dummy returns one', () => {
   const blogs = []
@@ -64,4 +83,12 @@ describe('most likes', () => {
     assert.deepStrictEqual(result, {author: 'Edsger W. Dijkstra', likes: 12})
   })
 
+})
+
+
+
+
+
+after(async () => {
+  await mongoose.connection.close()
 })

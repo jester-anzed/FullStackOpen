@@ -6,10 +6,11 @@
   "author": "",
   "type": "commonjs",
   "main": "index.js",
-  "scripts": {
+   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development node --watch index.js",
-    "test": "cross-env  NODE_ENV=test node --test"
+    "test": "cross-env  NODE_ENV=test node --test",
+    "lint": "eslint ."
   },
   "dependencies": {
     "cross-env": "^10.1.0",
