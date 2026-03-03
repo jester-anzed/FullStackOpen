@@ -21,20 +21,41 @@ test('returns the correct amount of blogs', async () => {
 })
 
 
-test.only('verify unique identifier property', async () => {
+test('verify unique identifier property', async () => {
 
   const response = await api.get('/api/blogs')
 
   const firstBlog = response.body[0]
-  
+
   assert.ok(firstBlog.id)
   assert.strictEqual(firstBlog._id, undefined)
 
-
 })
 
+test.only('verify post request', async () => {
 
+  const newBlog = {
+    title: "PoE",
+    author: "Jes",
+    url: "Jes.poe.com",
+    likes: 50
+  }
 
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+
+  assert.strictEqual(response.body.length, blogs.length + 1)
+
+  const contents = response.body.map(cont => cont.title)
+
+  assert(contents.includes("PoE"))
+
+})
 
 test('dummy returns one', () => {
   const blogs = []
