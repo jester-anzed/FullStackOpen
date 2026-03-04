@@ -94,7 +94,7 @@ test('missing data', async () => {
 })
 
 describe('deleting data', () => {
-  test.only('deleted data', async () => {
+  test('deleted data', async () => {
     
     const deletedData = blogs[0]._id
 
@@ -109,6 +109,26 @@ describe('deleting data', () => {
 
     assert.strictEqual(blogsAfterDelete.body.length, blogs.length - 1)
  
+
+  })
+
+})
+
+describe('updating data', () => {
+  test.only('update likes data', async () => {
+    
+    const blogId = blogs[0]._id
+
+    await api
+      .put(`/api/blogs/${blogId}`)
+      .send({ likes: 5})
+      .expect(200)
+
+    
+    const response = await api.get(`/api/blogs/${blogId}`)
+
+    console.log(response.body)
+
 
   })
 
