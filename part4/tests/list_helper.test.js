@@ -6,6 +6,7 @@ const app = require('../app')
 const blogs = require('./blog_helper')
 const mongoose = require('mongoose')
 const Blogs = require('../models/blog')
+const { update } = require('lodash')
 
 const api = supertest(app)
 
@@ -125,11 +126,12 @@ describe('updating data', () => {
       .expect(200)
 
     
-    const response = await api.get(`/api/blogs/${blogId}`)
+    const response = await api.get('/api/blogs')
 
-    console.log(response.body)
-
-
+    const updatedLikes = response.body.find(blog => blog.id === blogId)
+ 
+    assert.strictEqual(updatedLikes.likes, 5)
+   
   })
 
 })
