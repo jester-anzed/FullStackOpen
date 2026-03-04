@@ -93,6 +93,27 @@ test('missing data', async () => {
   
 })
 
+describe('deleting data', () => {
+  test.only('deleted data', async () => {
+    
+    const deletedData = blogs[0]._id
+
+    await api
+      .delete(`/api/blogs/${deletedData}`)
+      .expect(204)
+
+    const blogsAfterDelete = await api.get('/api/blogs')
+
+    const ids = blogsAfterDelete.body.map(blog => blog.id)
+    assert(!ids.includes(deletedData))
+
+    assert.strictEqual(blogsAfterDelete.body.length, blogs.length - 1)
+ 
+
+  })
+
+})
+
 
 
 test('dummy returns one', () => {
