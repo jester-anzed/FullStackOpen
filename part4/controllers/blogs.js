@@ -12,7 +12,7 @@ blogRouter.post('/', async (request, response) => {
   
   if (blog.title && blog.url) {
     const savedBlog = await blog.save()
-    return response.status(204).json(savedBlog)
+    return response.status(201).json(savedBlog)
   } else {
     return response.status(400).end()
   }
