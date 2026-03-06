@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
-  username: String,
+  username: {
+    type: String,
+    unique: true,
+  },
   name: String,
   passwordHash: String,
 })
@@ -16,6 +19,5 @@ userSchema.set('toJSON', {
   }
 })
 
-const User = mongoose.model('User', userSchema)
 
-module.exports = User
+module.exports = mongoose.model('User', userSchema)

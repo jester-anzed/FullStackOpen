@@ -116,7 +116,7 @@ describe('deleting data', () => {
 })
 
 describe('updating data', () => {
-  test.only('update likes data', async () => {
+  test('update likes data', async () => {
     
     const blogId = blogs[0]._id
 
