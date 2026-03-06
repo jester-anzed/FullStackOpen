@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const blogRouter = require('./controllers/blogs')
 const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
+const usersRouter = require('./controllers/users')
 
 logger.info('connecting to', config.MONGODB_URI)
 
@@ -17,10 +18,11 @@ mongoose
     logger.error('error connection to MongoDB:', error.message)
   })
 
-
 app.use(express.json())
 app.use(middleware.requestLogger)
 app.use('/api/blogs', blogRouter)
+app.use('/api/users', usersRouter)
+
 
 
 app.use(middleware.unknownEndpoint)
