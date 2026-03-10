@@ -1,9 +1,10 @@
-POST http://localhost:3001/api/users
+POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
-
 {   
-    "username": "Jekkasd",
-    "name": "Jes",
-    "password": "12"
+    "title": "Play Lost Ark",
+    "author": "Jes Ismael",
+    "url": "www.play-lostArk.com",
+    "likes": 22,
+    "user":  "69b0242eff80bea4a7791bdd"
 }

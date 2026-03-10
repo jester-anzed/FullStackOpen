@@ -6,7 +6,6 @@ const mongoose = require('mongoose')
 const userHelper = require('../models/user')
 const dummyUser = require('./user_helper')
 
-
 const api = supertest(app)
 
 beforeEach(async () => {
@@ -17,8 +16,6 @@ beforeEach(async () => {
 describe('User Validation', () => {
     test.only('Min Length User', async ()=> {
 
-
-    
         const newUser = {
             username: "Ma",
             name: "Jester",
