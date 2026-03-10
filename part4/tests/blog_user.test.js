@@ -11,30 +11,30 @@ const api = supertest(app)
 
 beforeEach(async () => {
     await userHelper.deleteMany({})
-    await userHelper.insertMany({dummyUser})
+    await userHelper.insertMany(dummyUser)
 })
 
 describe('User Validation', () => {
     test.only('Min Length User', async ()=> {
 
+
+    
         const newUser = {
             username: "Ma",
             name: "Jester",
             password: "test1234"
         }
 
-        await api
+        const response = await api
         .post('/api/users')
         .send(newUser)
         .expect(400)
 
+        const userLength = await api.get('/api/users')
 
-         const userLength = await api.get('/api/users')
+       assert.strictEqual(userLength.body.length, userHelper.length)
+       assert.strictEqual(response.status, 400)
 
-         console.log(userLength.body)
-
-
-        
     })
 
 
