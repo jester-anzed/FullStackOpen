@@ -1,10 +1,11 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNhcHRhaW4gSmVzIiwiaWQiOiI2OWIwMjJmZjc3NzkxM2M1NzU3ZWJhMjYiLCJpYXQiOjE3NzMyMzg3NzJ9.MzT7H1eakn7EqgRqkwrT2D_KmqK4ZEETuVUzir-IEEA
 
 {   
-    "title": "Play Lost Ark",
-    "author": "Jes Ismael",
-    "url": "www.play-lostArk.com",
+    "title": "Play POE",
+    "author": "Me Ismael",
+    "url": "www.play-POE.com",
     "likes": 22,
     "user":  "69b0242eff80bea4a7791bdd"
 }
