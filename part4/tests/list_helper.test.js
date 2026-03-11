@@ -6,7 +6,8 @@ const app = require('../app')
 const blogs = require('./blog_helper')
 const mongoose = require('mongoose')
 const Blogs = require('../models/blog')
-const { update } = require('lodash')
+const dummyUser = require('./user_helper')
+const jwt = require('jsonwebtoken')
 
 const api = supertest(app)
 
@@ -59,11 +60,13 @@ test('verify post request', async () => {
 })
 
 test('verify likes', async () => {
+
   const newBlog = {
     title: "Workout",
     author: "Marc",
     url: "www.marc.com",
   }
+
 
   const response = await api
     .post('/api/blogs')
@@ -133,6 +136,66 @@ describe('updating data', () => {
     assert.strictEqual(updatedLikes.likes, 5)
    
   })
+
+})
+
+describe('Token Authentication', () => {
+  test.only("Test with token", async () => {
+
+      const loginDetails = {
+        username: "Jister",
+        password: "test123456"
+      }
+
+      
+      const login = await api.post('/api/login').send(loginDetails)
+      const token = login.body.token
+      
+      const newBlog = {
+        title: "Done Part 4",
+        author: "Jes",
+        url: "Done4theday.com",
+        likes: 10,
+      }
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(201)
+
+      const updatedBlog = await api.get('/api/blogs')
+
+      const content = updatedBlog.body.map(blog => blog.title)
+
+      assert(content.includes("Done Part 4"))
+
+      assert.strictEqual(updatedBlog.body.length, blogs.length + 1)
+
+      
+  })
+  test.only("Test without token", async () => {
+    
+    const newBlog = {
+        title: "Create Doto",
+        author: "Life",
+        url: "Life4theday.com",
+        likes: 12,
+      }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+
+      const response = await api.get('/api/blogs')
+
+      assert.strictEqual(response.body.length, blogs.length)
+
+
+  })
+
+
 
 })
 

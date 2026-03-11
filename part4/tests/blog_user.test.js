@@ -14,10 +14,10 @@ beforeEach(async () => {
 })
 
 describe('User Validation', () => {
-    test.only('Min Length User', async ()=> {
+    test('Min Length User', async ()=> {
 
         const newUser = {
-            username: "Ma",
+            username: "Marco",
             name: "Jester",
             password: "test1234"
         }
