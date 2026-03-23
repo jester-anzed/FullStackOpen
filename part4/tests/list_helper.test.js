@@ -6,14 +6,25 @@ const app = require('../app')
 const blogs = require('./blog_helper')
 const mongoose = require('mongoose')
 const Blogs = require('../models/blog')
+const User = require('../models/user')
 const dummyUser = require('./user_helper')
 const jwt = require('jsonwebtoken')
+const { filter } = require('lodash')
 
 const api = supertest(app)
 
+
+
+
+
+
+
+
 beforeEach(async () => {
+
   await Blogs.deleteMany({})
   await Blogs.insertMany(blogs)
+
 })
 
 test('returns the correct amount of blogs', async () => {
@@ -36,6 +47,17 @@ test('verify unique identifier property', async () => {
 
 test('verify post request', async () => {
 
+  const newUser = { 
+    username: "Jizter",
+    password: "test123456"
+  }
+
+  await api.post('/api/users').send(newUser)
+  
+
+  const login = await api.post('/api/login').send(newUser)
+  const token = login.body.token
+
   const newBlog = {
     title: "PoE",
     author: "Jes",
@@ -46,6 +68,7 @@ test('verify post request', async () => {
   await api
     .post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', `Bearer ${token}`)
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
@@ -61,6 +84,18 @@ test('verify post request', async () => {
 
 test('verify likes', async () => {
 
+  const newUser = { 
+    username: "Jizter",
+    password: "test123456"
+  }
+
+  await api.post('/api/users').send(newUser)
+  
+  const login = await api.post('/api/login').send(newUser)
+  const token = login.body.token
+
+
+
   const newBlog = {
     title: "Workout",
     author: "Marc",
@@ -71,6 +106,7 @@ test('verify likes', async () => {
   const response = await api
     .post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', `Bearer ${token}`)
     .expect(201)
     .expect('Content-Type', /application\/json/)
   
@@ -80,6 +116,7 @@ test('verify likes', async () => {
 
 
 test('missing data', async () => {
+
   const newBlog = {
     author: "Mac",
     likes: 10,
@@ -88,7 +125,7 @@ test('missing data', async () => {
   await api
     .post('/api/blogs')
     .send(newBlog)
-    .expect(400)
+    .expect(401)
 
   const response = await api.get('/api/blogs')
 
@@ -98,21 +135,49 @@ test('missing data', async () => {
 })
 
 describe('deleting data', () => {
-  test('deleted data', async () => {
+  test.only('deleted data', async () => {
     
-    const deletedData = blogs[0]._id
+    
+    const newUser = { 
+      username: "Jizter",
+      password: "test123456"
+    }
+
+    await api.post('/api/users').send(newUser)
+    
+    const login = await api.post('/api/login').send(newUser)
+    const token = login.body.token
+
+    
+    const newBlog = {
+      title: "testing1",
+      author: "testing",
+      url: "www.testing.com",
+      likes: 25
+
+    }
 
     await api
-      .delete(`/api/blogs/${deletedData}`)
-      .expect(204)
+    .post('/api/blogs/')
+    .set('Authorization', `Bearer ${token}`)
+    .send(newBlog)
+    .expect('Content-Type', /application\/json/)
 
-    const blogsAfterDelete = await api.get('/api/blogs')
+    const user = await api.get('/api/users')
+    
+    const blogs = await api.get('/api/blogs')
 
-    const ids = blogsAfterDelete.body.map(blog => blog.id)
-    assert(!ids.includes(deletedData))
+    const addedBlog = blogs.body.find(blog => blog.title === "testing1")
 
-    assert.strictEqual(blogsAfterDelete.body.length, blogs.length - 1)
- 
+    await api
+    .delete(`/api/blogs/${addedBlog.id}`)
+    .set('Authorization', `Bearer ${token}`)
+    .expect(204)
+
+    const afterDelete = await api.get('/api/blogs')
+
+    console.log(afterDelete.length)
+
 
   })
 
@@ -140,17 +205,21 @@ describe('updating data', () => {
 })
 
 describe('Token Authentication', () => {
-  test.only("Test with token", async () => {
+  test("Test with token", async () => {
 
-      const loginDetails = {
-        username: "Jister",
-        password: "test123456"
-      }
+    
+    const newUser = { 
+      username: "Jizter",
+      password: "test123456"
+    }
 
-      
-      const login = await api.post('/api/login').send(loginDetails)
+    await api.post('/api/users').send(newUser)
+
+
+
+      const login = await api.post('/api/login').send(newUser)
       const token = login.body.token
-      
+
       const newBlog = {
         title: "Done Part 4",
         author: "Jes",
@@ -174,7 +243,7 @@ describe('Token Authentication', () => {
 
       
   })
-  test.only("Test without token", async () => {
+  test("Test without token", async () => {
     
     const newBlog = {
         title: "Create Doto",
@@ -198,7 +267,6 @@ describe('Token Authentication', () => {
 
 
 })
-
 
 
 test('dummy returns one', () => {

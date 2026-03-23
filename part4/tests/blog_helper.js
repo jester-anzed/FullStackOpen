@@ -6,7 +6,8 @@ const blogs = [
     author: "Michael Chan",
     url: "https://reactpatterns.com/",
     likes: 7,
-    __v: 0
+    __v: 0,
+    owner: "69aa410f02e32ca2057c3f06"
   },
   {
     _id: "5a422aa71b54a676234d17f8",

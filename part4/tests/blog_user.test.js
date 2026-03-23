@@ -17,9 +17,9 @@ describe('User Validation', () => {
     test('Min Length User', async ()=> {
 
         const newUser = {
-            username: "Marco",
+            username: "Ma",
             name: "Jester",
-            password: "test1234"
+            password: "Illuminati005"
         }
 
         const response = await api
@@ -36,8 +36,6 @@ describe('User Validation', () => {
 
 
 })
-
-
 
 
 

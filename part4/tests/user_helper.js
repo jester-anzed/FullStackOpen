@@ -5,7 +5,7 @@ const dummyUser = [
     "id": "69aa40dc02e32ca2057c3f01"
   },
   {
-    "username": "Marc",
+    "username": "Marco",
     "name": "Jes",
     "id": "69aa410f02e32ca2057c3f06"
   },
