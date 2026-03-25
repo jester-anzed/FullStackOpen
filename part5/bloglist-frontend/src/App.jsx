@@ -6,6 +6,7 @@ import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import './index.css'
+import Toggle from './components/Toggle'
 
 
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [loginVisible, setLoginVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -54,7 +56,7 @@ const App = () => {
       setTimeout(() => {
         setMessage(null)
         setMessageType(null)
-    }, 5000)
+    }, 2000)
   }
 
 }
@@ -92,16 +94,20 @@ const logoutHandle = () => {
     )
   } 
 
+
   return (
     <div>
       <h2>Blogs</h2>
 
       <p>{user.username} logged in <button onClick={logoutHandle}>Logout</button></p>
 
-      <h2>Create New</h2>
-      <Notification message={message} type={messageType} />
-      <NewBlog addBlog={addBlog} title={title} setTitle={setTitle} author={author} setAuthor={setAuthor}
-        url={url} setUrl={setUrl} />
+      <Toggle label="Create New Blog">
+        <Notification message={message} type={messageType} />
+        <h2>Create New</h2>
+        <NewBlog addBlog={addBlog} title={title} setTitle={setTitle} author={author} setAuthor={setAuthor}
+            url={url} setUrl={setUrl} />
+      </Toggle>
+
 
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
