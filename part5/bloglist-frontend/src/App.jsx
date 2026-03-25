@@ -19,7 +19,6 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
-  const [loginVisible, setLoginVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -93,7 +92,6 @@ const logoutHandle = () => {
       </div>
     )
   } 
-
 
   return (
     <div>
