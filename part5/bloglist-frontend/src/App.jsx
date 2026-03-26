@@ -16,9 +16,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -60,14 +57,9 @@ const App = () => {
 
 }
 
-const addBlog = event => { 
-      event.preventDefault()
-      const newBlogObject = {id: Date.now(), title, author, url}
-      setBlogs(blogs.concat(newBlogObject))
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      setMessage(`a new blog ${title} by ${author} added`)
+const addBlog = (newBlog) => { 
+      setBlogs(blogs.concat(newBlog))
+      setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`)
       setMessageType('success')
       setTimeout(() => {
         setMessage(null)
@@ -102,8 +94,7 @@ const logoutHandle = () => {
       <Toggle label="Create New Blog">
         <Notification message={message} type={messageType} />
         <h2>Create New</h2>
-        <NewBlog addBlog={addBlog} title={title} setTitle={setTitle} author={author} setAuthor={setAuthor}
-            url={url} setUrl={setUrl} />
+        <NewBlog createBlog={addBlog} />
       </Toggle>
 
 
