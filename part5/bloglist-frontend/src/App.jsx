@@ -51,14 +51,17 @@ const App = () => {
 
 }
 
-const addBlog = (newBlog) => { 
-      setBlogs(blogs.concat(newBlog))
+const addBlog = async (newBlog) => { 
+      const create = await blogService.create(newBlog)
+      setBlogs(blogs.concat(create))
       setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`)
       setMessageType('success')
       setTimeout(() => {
         setMessage(null)
         setMessageType(null)
       }, 5000)
+
+      console.log(create)
 
 }
 
@@ -80,6 +83,11 @@ const logoutHandle = () => {
 
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
 
+  const handleDelete = id => {
+    const blogsAfterDelete = blogs.filter(blog => blog.id !== id)
+    setBlogs(blogsAfterDelete)
+  }
+
   return (
     <div>
       <h2>Blogs</h2>
@@ -93,7 +101,7 @@ const logoutHandle = () => {
       </Toggle>
 
       {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} user={user} handleDelete={handleDelete} />
       )}
     </div>
   )
