@@ -15,12 +15,13 @@ const App = () => {
   const [messageType, setMessageType] = useState(null)
   const [user, setUser] = useState(null)
 
+ 
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
   }, [])
-
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedUser')
@@ -77,6 +78,8 @@ const logoutHandle = () => {
     )
   } 
 
+  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
+
   return (
     <div>
       <h2>Blogs</h2>
@@ -89,8 +92,7 @@ const logoutHandle = () => {
         <NewBlog createBlog={addBlog} />
       </Toggle>
 
-
-      {blogs.map(blog =>
+      {sortedBlogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
     </div>

@@ -25,7 +25,7 @@ const Blog = ({ blog }) => {
     const newObject = { 
       title: blog.title,
       author: blog.author,
-      likes: blog.likes += 1,
+      likes: likes + 1,
       url: blog.url
     }
 
