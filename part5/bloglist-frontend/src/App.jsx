@@ -15,9 +15,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -59,16 +57,9 @@ const App = () => {
 
 }
 
-const addBlog = event => { 
-      event.preventDefault()
-      const newBlogObject = {id: Date.now(), title, author, url}
-      setBlogs(blogs.concat(newBlogObject))
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      setMessage(`a new blog ${title} by ${author} added`)
-      setMessageType('success')
-      setTimeout(() => {
+const addBlog = (handler) => { 
+      setBlogs(blogs.concat(handler))
+      setTimeout(() => {  
         setMessage(null)
         setMessageType(null)
       }, 5000)
@@ -100,8 +91,7 @@ const logoutHandle = () => {
 
       <Toggle label="Create New">
         <Notification message={message} type={messageType} />
-        <NewBlog addBlog={addBlog} title={title} setTitle={setTitle} author={author} setAuthor={setAuthor}
-          url={url} setUrl={setUrl} />
+        <NewBlog handleSubmit={addBlog} />
       </Toggle>
 
       {blogs.map(blog =>
