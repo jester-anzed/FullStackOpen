@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, user, handleDelete}) => {
+const Blog = ({ blog, user, handleDelete }) => {
   const [visible, setVisible] = useState(false)
   const [likes, setLikes ] = useState(blog.likes)
 
@@ -22,8 +22,8 @@ const Blog = ({ blog, user, handleDelete}) => {
   }
 
   const updatedLikes = blog => {
-    
-    const newObject = { 
+
+    const newObject = {
       title: blog.title,
       author: blog.author,
       likes: likes + 1,
@@ -33,20 +33,20 @@ const Blog = ({ blog, user, handleDelete}) => {
 
     blogService.update(blog.id, newObject)
     setLikes(newObject.likes)
-    
-  } 
+
+  }
 
   const deleteData = blog => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       blogService.deleteData(blog.id)
       handleDelete(blog.id)
-    } 
+    }
   }
 
   return (
     <div style={blogStyle}>
       <div style={hideDetails}>
-        {blog.title} {blog.author} <button onClick={visibilityToggle}>View</button> 
+        {blog.title} {blog.author} <button onClick={visibilityToggle}>View</button>
       </div>
       <div style={showDetails}>
         <div>
@@ -62,11 +62,11 @@ const Blog = ({ blog, user, handleDelete}) => {
         </div>
         <div>
           {blog.author}
-          {(blog.user === user.id || blog.user.username === user.username) && <button onClick={() => deleteData(blog)}>Delete</button>}
+          {(blog.user.id === user.id || blog.user.username === user.username) && <button onClick={() => deleteData(blog)}>Delete</button>}
         </div>
       </div>
-  
-  </div>
-)}
+
+    </div>
+  )}
 
 export default Blog

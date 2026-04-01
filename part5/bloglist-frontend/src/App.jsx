@@ -15,12 +15,12 @@ const App = () => {
   const [messageType, setMessageType] = useState(null)
   const [user, setUser] = useState(null)
 
- 
+
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const App = () => {
 
   const handleLogin = async (handler) => {
     try {
-      const user = await loginService.login({ username: handler.username, password: handler.password})
+      const user = await loginService.login({ username: handler.username, password: handler.password })
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
@@ -46,40 +46,41 @@ const App = () => {
       setTimeout(() => {
         setMessage(null)
         setMessageType(null)
-    }, 2000)
+      }, 2000)
+    }
+
   }
 
-}
+  const addBlog = async (newBlog) => {
+    const create = await blogService.create(newBlog)
+    console.log(create)
+    setBlogs(blogs.concat(create))
+    setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`)
+    setMessageType('success')
+    setTimeout(() => {
+      setMessage(null)
+      setMessageType(null)
+    }, 5000)
 
-const addBlog = async (newBlog) => { 
-      const create = await blogService.create(newBlog)
-      setBlogs(blogs.concat(create))
-      setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`)
-      setMessageType('success')
-      setTimeout(() => {
-        setMessage(null)
-        setMessageType(null)
-      }, 5000)
+    console.log(create)
 
-      console.log(create)
+  }
 
-}
-
-const logoutHandle = () => {
-  window.localStorage.clear()
-  setUser(null)
-}
+  const logoutHandle = () => {
+    window.localStorage.clear()
+    setUser(null)
+  }
 
 
   if (user === null) {
     return (
       <div>
         <h2>Log in to application</h2>
-        <Notification message={message} type={messageType}  /> 
+        <Notification message={message} type={messageType}  />
         <LoginForm loginData={handleLogin} />
       </div>
     )
-  } 
+  }
 
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
 
