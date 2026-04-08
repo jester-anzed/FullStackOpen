@@ -11,5 +11,11 @@ export default defineConfig({
         changeOrigin: true
       }
     }
+  },
+  test: {
+    environment: 'jsdom',
+    pool: 'vmThreads',
+    globals: true,
+    setupFiles: './testSetup.js',
   }
 })
