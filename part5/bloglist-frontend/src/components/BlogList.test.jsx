@@ -1,4 +1,5 @@
 import Blog from './Blog'
+import New from './New'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
@@ -58,5 +59,31 @@ test('like clicked twice', async () => {
     await user.click(button)
 
     expect(mockHandler.mock.calls).toHaveLength(2)
+
+})
+
+test('new blog form', async () => {
+    const mockHandler = vi.fn()
+    const user = userEvent.setup()
+
+    render(<New createBlog={mockHandler} />)
+
+    const button = screen.getByText('Create')
+
+    const title = screen.getByPlaceholderText('title')
+    const author = screen.getByPlaceholderText('author')
+    const url = screen.getByPlaceholderText('url')
+
+    await user.type(title, 'Practice')
+    await user.type(author, 'Jes')
+    await user.type(url, 'www.jes.com')
+    await user.click(button)
+
+
+    expect(mockHandler.mock.calls).toHaveLength(1)
+    expect(mockHandler.mock.calls[0][0].title).toBe('Practice')
+    expect(mockHandler.mock.calls[0][0].author).toBe('Jes')
+    expect(mockHandler.mock.calls[0][0].url).toBe('www.jes.com')
+
 
 })
