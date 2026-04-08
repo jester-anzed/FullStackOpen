@@ -28,4 +28,35 @@ describe('Blog Testing', () => {
 
     })
 
+    test('render likes and url', async () => {
+        const user = userEvent.setup()
+        const button = screen.getByText('View')
+        await user.click(button)
+
+        const details = container.querySelector('.hiddenDetails')
+        expect(details).toHaveTextContent('15')
+        expect(details).toHaveTextContent('www.consistency.com')
+    })
+
+})
+
+test('like clicked twice', async () => {
+    const newBlog = {
+        title: 'Consistency',
+        author: 'Jes',
+        likes: 15,
+        url: 'www.consistency.com',
+        user: { username: 'testuser', id: '123' }
+    }
+    const mockHandler = vi.fn()
+
+    render(<Blog blog={newBlog} user={{ username: 'testuser', id: '123' }} updatedLikes={mockHandler} />)
+
+    const user = userEvent.setup()
+    const button = screen.getByText('like')
+    await user.click(button)
+    await user.click(button)
+
+    expect(mockHandler.mock.calls).toHaveLength(2)
+
 })

@@ -15,8 +15,6 @@ const App = () => {
     const [messageType, setMessageType] = useState(null)
     const [user, setUser] = useState(null)
 
-
-
     useEffect(() => {
         blogService.getAll().then(blogs =>
             setBlogs( blogs )
@@ -89,6 +87,21 @@ const App = () => {
         setBlogs(blogsAfterDelete)
     }
 
+
+    const updatedLikes = blog => {
+        const newObject = {
+            id: blog.id,
+            title: blog.title,
+            author: blog.author,
+            likes: blog.likes + 1,
+            url: blog.url,
+            user : blog.user
+        }
+        blogService.update(blog.id, newObject)
+        const updateBlog = blogs.map(b => b.id === blog.id ? newObject : b)
+        setBlogs(updateBlog)
+    }
+
     return (
         <div>
             <h2>Blogs</h2>
@@ -102,7 +115,7 @@ const App = () => {
             </Toggle>
 
             {sortedBlogs.map(blog =>
-                <Blog key={blog.id} blog={blog} user={user} handleDelete={handleDelete} />
+                <Blog key={blog.id} blog={blog} user={user} handleDelete={handleDelete} updatedLikes={updatedLikes}  />
             )}
         </div>
     )
