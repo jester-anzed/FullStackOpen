@@ -37,4 +37,30 @@ describe('Blog app', () => {
       await expect(error).toContainText('wrong credentials')
     })
   })
+
+
+  describe('When logged in', () => {
+    beforeEach(async ({ page }) => {
+      loginWith(page, 'Jester', 'test123456')
+  })
+
+  test('a new blog can be created', async ({ page }) => {
+    await page.getByRole('button', { name: 'Create New Blog'}).click()
+    await expect(page.getByLabel('Title:')).toBeVisible()
+    await expect(page.getByLabel('Author:')).toBeVisible()
+    await expect(page.getByLabel('Url:')).toBeVisible()
+
+    await page.getByLabel('Title:').fill('Studying Today')
+    await page.getByLabel('Author:').fill('Jester')
+    await page.getByLabel('Url:').fill('www.productive.com')
+
+    await page.getByRole('button', { name: 'Create' }).click()
+
+
+    const success = page.locator('.success')
+    await expect(page.getByText('Studying Today Jester')).toBeVisible()
+    await expect(success).toContainText('a new blog Studying Today by Jester added')
+
+  })
+})
 })
