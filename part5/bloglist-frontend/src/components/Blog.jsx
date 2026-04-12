@@ -29,6 +29,9 @@ const Blog = ({ blog, user, handleDelete, updatedLikes }) => {
         }
     }
 
+    console.log(blog.user)
+    console.log(user)
+
     return (
         <div  style={blogStyle}>
             <div className='showDetails' style={showDetails}>

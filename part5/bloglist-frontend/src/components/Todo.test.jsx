@@ -78,7 +78,4 @@ test('delete', async() => {
 
     expect(mockHandler).toHaveBeenCalledWith('test123')
 
-
-
-
 })
